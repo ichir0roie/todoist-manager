@@ -10,6 +10,10 @@ import random
 import math
 
 
+class MyType:
+    ListTask = list[Todoist.Task]
+
+
 class TodoistManager:
     def __init__(self, mode_test: bool):
         self.api = TodoistAPI(stg.token)
@@ -30,25 +34,46 @@ class TodoistManager:
         due_date = date.strftime("%Y-%m-%d")
         time.sleep(1)
 
-    def set_random_due_date(self, tasks: list):
+    def set_random_due_date(self, tasks: list[Todoist.Task]):
         for task in tasks:
-            due_date = self.get_random_date_string(task.priority)
+            due_date = self.get_random_date_by_priority(task.priority)
             if not self.mode_test:
-                self.api.update_task(task_id=task.id, due_date=due_date)
+                self.api.update_task(
+                    task_id=task.id, due_date=self.get_date_string(due_date)
+                )
             else:
                 print("test mode : set due {} to {}".format(task.id, task.due))
                 print(task.id)
             print("{} : {}".format(task.content, due_date))
             time.sleep(1)
 
-    def get_random_date_string(self, priority: int):
-        date = datetime.datetime.now()
+    def get_random_date_by_priority(self, priority: int) -> datetime.datetime:
         add_date_base = 7
         add_date = math.pow(priority, 2) * add_date_base
         add_random = add_date_base + random.randint(0, add_date)
-        # print(add_random)
-        date = date + datetime.timedelta(days=add_random)
+        return self.get_random_date(0, add_random)
+
+    def get_random_date(self, range_start: int, range_end) -> datetime.datetime:
+        date = datetime.datetime.now()
+        date = date + datetime.timedelta(days=random.randint(range_start, range_end))
+        return date
+
+    def get_date_string(self, date: datetime.datetime) -> str:
         return date.strftime("%Y-%m-%d")
+
+    def run(self):
+        task_list = self.get_tasks()
+        self._edit_tasks(task_list=task_list)
+
+    def get_tasks(self) -> MyType.ListTask:
+        return
+
+    def _edit_tasks(self, task_list: MyType.ListTask):
+        for task in task_list:
+            self.edit_task(task)
+
+    def edit_task(self, task: Todoist.Task):
+        pass
 
 
 if __name__ == "__main__":

@@ -1,4 +1,5 @@
-FROM public.ecr.aws/lambda/python:3.8
+# https://gallery.ecr.aws/lambda/python
+FROM public.ecr.aws/lambda/python:3.9
 
 EXPOSE 80
 

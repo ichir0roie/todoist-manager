@@ -2,7 +2,7 @@ from asyncio import tasks
 import time
 import todoist_api_python.api as Todoist
 
-import package.constants as cst
+import package.todoist_constants as cst
 import package.settings as stg
 
 

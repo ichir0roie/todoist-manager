@@ -14,19 +14,19 @@ import math
 import random
 
 
-class RandomDueDate(TodoistManager):
+class ThrowAway(TodoistManager):
 
     # get no date and not noDueDate and not subtask
     def get_tasks(self) -> MyType.ListTask:
-        return self.api.get_tasks(filter=cst.Filter.overdue)
+        return self.api.get_tasks(filter=cst.Filter.throwAway)
 
     def edit_task(self, task: Todoist.Task):
-        due_date = self.get_date_string(self.get_random_date(1, 7))
+        due_date = self.get_date_string(self.get_random_date(1, 360))
         self.api.update_task(
-            task_id=task.id, due_date=due_date, label_ids=[cst.LabelId.auto_due_date]
+            task_id=task.id, due_date=due_date, label_ids=[cst.LabelId.auto_throw_away]
         )
 
 
 if __name__ == "__main__":
-    rdd = RandomDueDate(mode_test=False)
+    rdd = ThrowAway(mode_test=False)
     rdd.run()

@@ -2,11 +2,11 @@ from asyncio import tasks
 import time
 import todoist_api_python.api as Todoist
 
-import package.constants as cst
+import package.todoist_constants as cst
 import package.settings as stg
 
-
-from package.todoist_manager import TodoistManager
+from package.todoist_manager import TodoistManager, MyType
+import package.todoist_constants as cst
 
 import datetime
 import math
@@ -14,20 +14,18 @@ import random
 
 
 class RandomReschedule(TodoistManager):
+    def get_tasks(self) -> MyType.ListTask:
+        return self.api.get_tasks(filter=cst.Filter.reschedule)
 
-    # get no date and not noDueDate and not subtask
-    def get_tasks_filter(self):
-        filter = "overdue"
-        tasks = self.api.get_tasks(filter=filter)
-        return tasks
-
-    def run(self):
-        tasks = self.get_tasks_filter()
-        self.set_random_due_date(tasks=tasks)
+    def edit_task(self, task: Todoist.Task):
+        due_date = self.get_date_string(self.get_random_date(1, 90))
+        self.api.update_task(
+            task_id=task.id, due_date=due_date, label_ids=[cst.LabelId.auto_reschedule]
+        )
 
 
 if __name__ == "__main__":
-    rr = RandomReschedule()
+    rr = RandomReschedule(mode_test=False)
     # rr.test()
     rr.run()
     pass

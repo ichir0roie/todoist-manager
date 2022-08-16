@@ -5,18 +5,9 @@ sys.path.insert(0, "package")
 sys.path.insert(0, "scripts")
 
 import test
-import scripts.random_reschedule
-import scripts.random_due_date
-
-
-def run_due_date(mode_test):
-    t = scripts.random_due_date.RandomDueDate(mode_test=mode_test)
-    t.run()
-
-
-def run_reschedule(mode_test):
-    t = scripts.random_reschedule.RandomReschedule(mode_test=mode_test)
-    t.run()
+from scripts.random_reschedule import RandomReschedule
+from scripts.random_due_date import RandomDueDate
+from scripts.throw_away import ThrowAway
 
 
 def handler(event: dict, context):
@@ -38,12 +29,15 @@ def handler(event: dict, context):
     print("mode : {}\ntest : {}".format(mode, mode_test))
 
     if mode == "all":
-        run_due_date(mode_test)
-        run_reschedule(mode_test)
-    elif mode == "random_due_date":
-        run_due_date(mode_test)
-    elif mode == "random_reschedule":
-        run_reschedule(mode_test)
+        RandomDueDate(mode_test=mode_test).run()
+        RandomReschedule(mode_test=mode_test).run()
+        ThrowAway(mode_test=mode_test).run()
+    if "random_due_date" in mode:
+        RandomDueDate(mode_test=mode_test).run()
+    if "random_reschedule" in mode:
+        RandomReschedule(mode_test=mode_test).run()
+    if "throw_away" in mode:
+        ThrowAway(mode_test=mode_test).run()
 
 
 if __name__ == "__main__":
