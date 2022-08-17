@@ -1,13 +1,14 @@
-from operator import truediv
 import sys
 
 sys.path.insert(0, "package")
 sys.path.insert(0, "scripts")
 
-import test
 from scripts.random_reschedule import RandomReschedule
 from scripts.random_due_date import RandomDueDate
 from scripts.throw_away import ThrowAway
+from scripts.not_due_date_due import NotDueDateDue
+
+import json
 
 
 def handler(event: dict, context):
@@ -28,10 +29,13 @@ def handler(event: dict, context):
 
     print("mode : {}\ntest : {}".format(mode, mode_test))
 
+    result = []
+
     if mode == "all":
-        RandomDueDate(mode_test=mode_test).run()
-        RandomReschedule(mode_test=mode_test).run()
-        ThrowAway(mode_test=mode_test).run()
+        result.append(RandomDueDate(mode_test=mode_test).run())
+        result.append(RandomReschedule(mode_test=mode_test).run())
+        result.append(ThrowAway(mode_test=mode_test).run())
+        result.append(NotDueDateDue(mode_test=mode_test).run())
     if "random_due_date" in mode:
         RandomDueDate(mode_test=mode_test).run()
     if "random_reschedule" in mode:
@@ -39,7 +43,4 @@ def handler(event: dict, context):
     if "throw_away" in mode:
         ThrowAway(mode_test=mode_test).run()
 
-
-if __name__ == "__main__":
-    handler(None, None)
-    pass
+    return json.dumps(result)

@@ -4,4 +4,6 @@ import app
 test_event = {"mode": "all", "test": False}
 
 
-app.handler(test_event, None)
+result = app.handler(test_event, None)
+
+print(result)

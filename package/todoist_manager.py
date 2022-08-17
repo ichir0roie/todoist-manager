@@ -1,3 +1,4 @@
+
 from todoist_api_python.api import TodoistAPI
 import todoist_api_python.api as Todoist
 
@@ -8,7 +9,6 @@ import datetime
 import time
 import random
 import math
-
 
 class MyType:
     ListTask = list[Todoist.Task]
@@ -21,7 +21,23 @@ class TodoistManager:
         self.update_projects()
         self.mode_test = mode_test
 
+        self.label_dict: dict[str, int]
+
+        self.setup()
+
         return
+
+    def setup(self):
+        labels = self.api.get_labels()
+        self.label_dict = {}
+        for label in labels:
+            self.label_dict[label.name] = label.id
+
+    def get_label_id(self, label_name: str) -> int:
+        if label_name in self.label_dict.keys():
+            return self.label_dict[label_name]
+        else:
+            raise Exception("not label in account.")
 
     def update_projects(self):
         try:
@@ -61,19 +77,31 @@ class TodoistManager:
     def get_date_string(self, date: datetime.datetime) -> str:
         return date.strftime("%Y-%m-%d")
 
-    def run(self):
+    def run(self) -> dict:
+        return_dict = {}
         task_list = self.get_tasks()
-        self._edit_tasks(task_list=task_list)
+        return_dict["task_list"] = [task.to_dict() for task in task_list]
+        return_dict["edit_info"] = self._edit_tasks(task_list=task_list)
+        return return_dict
 
     def get_tasks(self) -> MyType.ListTask:
-        return
+        return []
 
-    def _edit_tasks(self, task_list: MyType.ListTask):
+    def _edit_tasks(self, task_list: MyType.ListTask) -> list:
+        return_list = []
         for task in task_list:
-            self.edit_task(task)
+            try:
+                log_message = self.edit_task(task)
+                return_list.append(self.create_log(task, log_message))
+            except Exception as error:
+                raise Exception(error.args)
+        return return_list
 
-    def edit_task(self, task: Todoist.Task):
-        pass
+    def create_log(self, task: Todoist.Task, message: str):
+        return "content : {} , message : {}".format(task.content, message)
+
+    def edit_task(self, task: Todoist.Task) -> str:
+        return ""
 
 
 if __name__ == "__main__":
