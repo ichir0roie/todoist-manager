@@ -1,6 +1,6 @@
 class Filter:
-    reschedule = "((no date & !subtask ) | (#inbox & !subtask) )& !@notDueDate"
-    overdue = "overdue & !@throwAway"
+    reschedule = "((no date & !subtask  )|(#inbox & no date & !subtask))& !@notDueDate"
+    overdue = "overdue & !@throwAway & (p3|p4)"
     throw_away = "@throwAway"
     not_due_date_due = "@notDueDate & ! no date"
 
