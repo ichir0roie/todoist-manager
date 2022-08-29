@@ -1,4 +1,3 @@
-
 import todoist_api_python.api as Todoist
 
 import package.todoist_constants as cst
@@ -11,7 +10,7 @@ class NotDueDateDue(TodoistManager):
 
     # get no date and not noDueDate and not subtask
     def get_tasks(self) -> MyType.ListTask:
-        return self.api.get_tasks(filter=cst.Filter.not_due_date_due)
+        return self.api.get_tasks(filter=cst.Filter.due_not_due_date)
 
     def edit_task(self, task: Todoist.Task):
         label_id = self.get_label_id(cst.LabelNames.not_due_date)
