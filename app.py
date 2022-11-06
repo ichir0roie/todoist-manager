@@ -32,7 +32,7 @@ def handler(event: dict, context):
     result = []
 
     if mode == "all":
-        result.append(RandomDueDate(mode_test=mode_test).run())
+        # result.append(RandomDueDate(mode_test=mode_test).run())
         result.append(RandomReschedule(mode_test=mode_test).run())
         result.append(ThrowAway(mode_test=mode_test).run())
         result.append(NotDueDateDue(mode_test=mode_test).run())

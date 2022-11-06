@@ -6,16 +6,18 @@ import package.todoist_constants as cst
 
 from package.todoist_manager import TodoistManager, MyType
 
+
 class RandomDueDate(TodoistManager):
 
     # get no date and not noDueDate and not subtask
     def get_tasks(self) -> MyType.ListTask:
-        return self.api.get_tasks(filter=cst.Filter.overdue)
+        return self.api.get_tasks(
+            filter="overdue & !@throwAway & (p3|p4)"
+        )
 
     def edit_task(self, task: Todoist.Task):
         due_date = self.get_date_string(self.get_random_date(1, 7))
-        label_id = self.get_label_id(cst.LabelNames.auto_due_date)
-        self.api.update_task(task_id=task.id, due_date=due_date, label_ids=[label_id])
+        self.api.update_task(task_id=task.id, due_date=due_date)
         return "overdue reset : {}".format(due_date)
 
 

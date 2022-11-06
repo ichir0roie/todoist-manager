@@ -1,5 +1,5 @@
 class Filter:
-    reschedule = "no date & !subtask & !@notDueDate"
+    reschedule = "( over due | no date) & !subtask & !@notDueDate"
     overdue = "overdue & !@throwAway & (p3|p4)"
     throw_away = "@throwAway"
     due_not_due_date = "@notDueDate & ! no date"
